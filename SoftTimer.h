@@ -18,11 +18,6 @@
     extern "C" {
     #endif
 
-    #define MAX_VALUE_8_BIT  0xFF       /* 16bit最大ms数 */
-    #define MAX_VALUE_16_BIT 0xFFFF     /* 16bit最大ms数 */
-    #define MAX_VALUE_24_BIT 0xFFFFFF   /* 16bit最大ms数 */
-    #define MAX_VALUE_32_BIT 0xFFFFFFFF /* 16bit最大ms数 */
-
     #define SW_ERROR               (-1) /* 操作失败返回值 */
     #define SW_OK                   (0) /* 操作成功返回值 */
 
@@ -46,7 +41,7 @@
     ****************************************************/
     typedef struct _TIMER
     {
-        uint8      periodic;         /* 单次触发/周期触发 */
+        uint8       periodic;        /* 单次触发/周期触发 */
         uint32      start;           /* 计时器起始时间 */
         uint32      now;             /* 计时器当前时间 */
         uint32      elapse;          /* 计时器已过时间 */
