@@ -4,9 +4,9 @@
     * 文件名称：SoftTimer.c
     * 内容摘要：软件定时器模块
     * 其他说明：首先运行TimersInit函数，需向该函数提供"1ms的系统时钟"和"最大系统ms数"，
-    *         然后在各自的应用模块中调用CreatTimer创建定时器，该函数返回的地址为该定
-    *         时器的地址，可用与重启或删除定时器结点，请妥善保管。请在主循环中执行
-    *         ProcessTimer函数以更新定时器时间。
+    *           然后在各自的应用模块中调用CreatTimer创建定时器，该函数返回的地址为该定
+    *           时器的地址，可用与重启或删除定时器结点，请妥善保管。请在主循环中执行
+    *           ProcessTimer函数以更新定时器时间。
     * 当前版本：V1.00
     * 作 者：  David Han, Ian
     * 完成日期：2015年2月20日
@@ -15,18 +15,17 @@
     #include "common.h"
     #include "SoftTimer.h"
 
-    static TIMER_TABLE* sg_ptTimeTableHead = NULL;             /* 链表表头       */
+    static TIMER_TABLE* sg_ptTimeTableHead = NULL;             /* 链表表头        */
     static TMRSOURCE    sg_pfSysClk        = NULL;             /* 系统1ms时钟函数 */
-    static long int     sg_dwTimeMaxValue  = MAX_VALUE_16_BIT; /* 最大ms数       */
 
     /*************************************************************************
     * 函数名称：int TimersInit(TMRSOURCE pfTimer, uint32 dwMaxTime)
     * 功能说明：初始化软件定时器模块
     * 输入参数：TMRSOURCE pfTimer  系统1ms时钟函数
-               uint32   dwMaxTime 时钟函数最大ms数
+                uint32   dwMaxTime 时钟函数最大ms数
     * 输出参数：无
     * 返 回 值：SW_ERROR: 操作失败
-               SW_OK 操作成功
+                SW_OK 操作成功
     * 其它说明：无
     **************************************************************************/
     int TimersInit(TMRSOURCE pfTimer, uint32 dwMaxTime)
@@ -45,8 +44,7 @@
         /* 申请成功后进行初始化 */
         sg_ptTimeTableHead->next = NULL;               /* 下个结点地址置空     */
         sg_pfSysClk              = (TMRSOURCE)pfTimer; /* 注册系统1ms时钟函数  */
-        sg_dwTimeMaxValue        = dwMaxTime;          /* 确定时钟函数最大ms数 */
-        
+
         return SW_OK;
     }
 
@@ -54,14 +52,14 @@
     * 函数名称：TIMER_TABLE* CreatTimer(uint32 dwTimeout, uint8 ucPeriodic, TMRCALLBACK pfTimerCallback, void *pArg)
     * 功能说明：创建并启动软件定时器
     * 输入参数：uint32       dwTimeout  0~0xFFFFFFFF 定时时间
-               uint8       ucPeriodic  SINGLE      单次触发
-                                       PERIODIC    周期触发
-               TMRCALLBACK pfTimerCallback         定时结束时回调函数
-               void       *pArg                    回调函数参数
+                uint8       ucPeriodic  SINGLE       单次触发
+                                        PERIODIC     周期触发
+                TMRCALLBACK pfTimerCallback          定时结束时回调函数
+                void       *pArg                     回调函数参数
                 
     * 输出参数：无
     * 返 回 值：操作失败 : NULL
-               操作成功 : 定时器模块指针
+                操作成功 : 定时器模块指针
     * 其它说明：创建完定时器后返回定时器结点的地址，改地址用于重启或删除该定时器
     **************************************************************************/
     TIMER_TABLE* CreatTimer(uint32 dwTimeout, uint8 ucPeriodic, TMRCALLBACK pfTimerCallback, void *pArg)
@@ -172,22 +170,15 @@
         TIMER_TABLE* ptNodeFree;
         if (NULL == sg_ptTimeTableHead)
         {
-            return SW_ERROR; /* 检查是否申请成功 */
+            return SW_OK; /* 没有定时器需要运行 */
         }
-        ptFind = sg_ptTimeTableHead->next;    /* 找到第一个有效结点 */
+        ptFind = sg_ptTimeTableHead;          /* 找到第一个有效结点 */
         while(ptFind)                         /* 如果不是末尾结点 */
         {
             ptFind->data.now = sg_pfSysClk(); /* 更新时间 */
 
             /* 计算此刻时间与起始时间的时间差 */
-            if(ptFind->data.now >= ptFind->data.start)
-            {
-                ptFind->data.elapse = ptFind->data.now - ptFind->data.start;
-            }
-            else
-            {
-                ptFind->data.elapse = sg_dwTimeMaxValue - ptFind->data.start + ptFind->data.now;
-            }
+            ptFind->data.elapse = ptFind->data.now - ptFind->data.start;
             
             if(ptFind->data.elapse >= ptFind->data.timeout)          /* 如果时差大于等于设定的计时时间 */
             {
