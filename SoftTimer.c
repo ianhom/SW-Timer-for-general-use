@@ -27,7 +27,7 @@
     *           SW_OK 操作成功
     * 其它说明：无
     **************************************************************************/
-        int TimersInit(TMRSOURCE pfTimer)
+    int TimersInit(TMRSOURCE pfTimer)
     {
         if (NULL == pfTimer)
         {
