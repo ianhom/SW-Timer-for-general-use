@@ -27,17 +27,26 @@
     *           SW_OK 操作成功
     * 其它说明：无
     **************************************************************************/
-    int TimersInit(TMRSOURCE pfTimer)
+        int TimersInit(TMRSOURCE pfTimer)
     {
         if (NULL == pfTimer)
         {
             return SW_ERROR; /* 检查注册函数是否为空指针 */
         }
         
-        sg_pfSysClk = (TMRSOURCE)pfTimer; /* 注册系统1ms时钟函数  */
+        sg_ptTimeTableHead = (TIMER_TABLE*)malloc(sizeof(TIMER_TABLE)); /* 申请头结点 */
+        if (NULL == sg_ptTimeTableHead)
+        {
+            return SW_ERROR; /* 检查是否申请成功 */
+        }
 
+        /* 申请成功后进行初始化 */
+        sg_ptTimeTableHead->next = NULL;               /* 下个结点地址置空     */
+        sg_pfSysClk              = (TMRSOURCE)pfTimer; /* 注册系统1ms时钟函数  */
+        
         return SW_OK;
     }
+
 
     /*************************************************************************
     * 函数名称：TIMER_TABLE* CreatTimer(uint32 dwTimeout, uint8 ucPeriodic, TMRCALLBACK pfTimerCallback, void *pArg)
