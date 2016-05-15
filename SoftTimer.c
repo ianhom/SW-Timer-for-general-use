@@ -34,7 +34,7 @@
             return SW_ERROR; /* 检查注册函数是否为空指针 */
         }
         
-        sg_ptTimeTableHead = (TIMER_TABLE*)malloc(sizeof(TIMER_TABLE)); /* 申请头结点 */
+        sg_ptTimeTableHead = (TIMER_TABLE*)malloc(sizeof(TIMER_TABLE)); /* 申请头结点，该头节点为空节点，方便链表节点增加和删除 */
         if (NULL == sg_ptTimeTableHead)
         {
             return SW_ERROR; /* 检查是否申请成功 */
