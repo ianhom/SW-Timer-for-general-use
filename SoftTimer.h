@@ -27,26 +27,26 @@ typedef uint32 (*TMRSOURCE)(void);
 * 结构名：TIMER
 * 描述： 软件定时器数据结构
 * 参数：
-     uint8        periodic;        SINGLE       单次触发
-                                   PERIOIC      周期触发
      uint32       start;           0~0xFFFFFFFF 计时器起始时间
      uint32       now;             0~0xFFFFFFFF 计时器当前时间
      uint32       elapse;          0~0xFFFFFFFF 计时器已过时间
      uint32       timeout;         0~0xFFFFFFFF 计时器计时时间
      TMRCALLBACK  pfTimerCallback;              计时结束后执行的回调函数
      void        *pArg;                         回调函数的参数
+     uint8        periodic;        SINGLE       单次触发
+                                   PERIOIC      周期触发
 * 作者： David Han, Ian
 * 日期: 2015-2-20
 ****************************************************/
 typedef struct _TIMER
 {
-    uint8       periodic;        /* 单次触发/周期触发 */
     uint32      start;           /* 计时器起始时间 */
     uint32      now;             /* 计时器当前时间 */
     uint32      elapse;          /* 计时器已过时间 */
     uint32      timeout;         /* 计时器计时时间 */
     TMRCALLBACK pfTimerCallback; /* 计时结束后执行的回调函数 */
     void       *pArg;            /* 回调函数的参数 */
+    uint8       periodic;        /* 单次触发/周期触发 */
 } TIMER;
 
 
@@ -54,15 +54,15 @@ typedef struct _TIMER
 * 结构名：TIMER_TABLE
 * 描述： 定时器列表(链表)
 * 参数：
-          TIMER                data; 本计时器结点数据
-          struct _TIMER_TABLE* next; 下一个定时器结点地址
+*         struct _TIMER_TABLE* next; 下一个定时器结点地址
+*         TIMER                data; 本计时器结点数据
 * 作者： David Han, Ian
 * 日期: 2015-2-20
 ****************************************************/
 typedef struct _TIMER_TABLE
 {
-    TIMER                data; /* 本计时器结点数据 */
     struct _TIMER_TABLE* next; /* 下一个定时器结点地址 */
+    TIMER                data; /* 本计时器结点数据 */
 }TIMER_TABLE;
 
 /*************************************************************************
